@@ -46,15 +46,16 @@ class Car:
         """Add the given amount of kilometers to the odometer"""
         self.odometer += kilometers
 
-marilena_car = Car("Toyota", "Yaris", 2024)
-print(marilena_car.describe_car())
-marilena_car.read_odometer()
 
-marilena_car.odometer = 20
-marilena_car.read_odometer()
+class ElectricCar(Car):
+    def __init__(self, battery_size, make, model, year):
+        super().__init__(make, model, year)
+        self.battery_size = battery_size
+    
+    def describe_battery(self):
+        print(f"This car has a {self.battery_size}kWh battery")
 
-marilena_car.update_odometer(40)
-marilena_car.read_odometer()
-
-marilena_car.increment_odometer(20)
-marilena_car.read_odometer()
+my_electric_car = ElectricCar(40, "VW", "ID3", 2024)
+my_electric_car.describe_battery()
+my_electric_car.increment_odometer(10)
+my_electric_car.read_odometer()
