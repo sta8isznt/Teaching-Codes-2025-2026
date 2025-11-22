@@ -10,7 +10,15 @@ class Restaurant:
     def set_number_surved(self, number_surved):
        self.number_surved = number_surved
 
-my_restaurant = Restaurant("Stathis Restaurant", "Suvlaki")
-my_restaurant.show_number_surved()
-my_restaurant.set_number_surved(10)
-my_restaurant.show_number_surved()
+class IceCreamStand(Restaurant):
+    def __init__(self, restaurant_name, cuisine_type, flavours):
+        super().__init__(restaurant_name, cuisine_type)
+        self.flavours = flavours
+
+    def describe_flavours(self):
+        print("We have the following flavours: ")
+        for i in self.flavours:
+            print(i)
+
+my_icecream_stand = IceCreamStand("O Italos", "Gellato", ["choco", "banana", "vanilla"])
+my_icecream_stand.describe_flavours()
