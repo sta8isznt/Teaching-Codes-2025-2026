@@ -15,6 +15,14 @@ class PongGame:
         # self.clock will be an object of class Clock()
         self.clock = pg.time.Clock()
 
+        # Ball
+        self.ball = pg.Rect(0,0,30,30)
+        self.ball.center = self.screen_rect.center
+        self.ball_speed_x = 6
+        self.ball_speed_y = 6
+        self.ball_x_direction = 1
+        self.ball_y_direction = 1
+
     def run(self):
         """Run the game loop"""
         while True:
@@ -36,7 +44,25 @@ class PongGame:
 
     def _update_screen(self):
         """Update the screen with the latest changes"""
+        # Fill the screen with black background color to erase all past changes
+        self.screen.fill('black')
+
+        # Draw a simple line at the center of the screen
+        pg.draw.aaline(self.screen, 'white', self.screen_rect.midtop, self.screen_rect.midbottom)
+        pg.draw.ellipse(self.screen, 'white', self.ball)
+        self._update_ball_position()
         pg.display.update()
+
+    def _update_ball_position(self):
+        """Update the position of the ball based on its current x, y speeds and directions"""
+        self.ball.x = self.ball.x + (self.ball_speed_x * self.ball_x_direction)
+        self.ball.y = self.ball.y + (self.ball_speed_y * self.ball_y_direction)
+
+        if self.ball.bottom >= self.screen_rect.bottom or self.ball.top <= 0:
+            self.ball_y_direction *= -1
+        if self.ball.right >= self.screen_rect.right or self.ball.left <= 0:
+            self.ball_x_direction *= -1
+
 
     def _check_keydown_events(event):
         pass
