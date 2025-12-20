@@ -23,6 +23,15 @@ class PongGame:
         self.ball_x_direction = 1
         self.ball_y_direction = 1
 
+        # Paddles
+        self.player_1 = pg.Rect(0,0, 20, 100)
+        self.player_1.midleft = self.screen_rect.midleft
+        self.player_2 = pg.Rect(0,0,20, 100)
+        self.player_2.midright = self.screen_rect.midright
+
+        self.player_1_speed = 0
+        self.player_2_speed = 0
+
     def run(self):
         """Run the game loop"""
         while True:
@@ -50,8 +59,31 @@ class PongGame:
         # Draw a simple line at the center of the screen
         pg.draw.aaline(self.screen, 'white', self.screen_rect.midtop, self.screen_rect.midbottom)
         pg.draw.ellipse(self.screen, 'white', self.ball)
+
+        pg.draw.rect(self.screen, 'white', self.player_1)
+        pg.draw.rect(self.screen, 'white', self.player_2)
+
         self._update_ball_position()
+        self._update_player_1_pos()
+        self._update_player_2_pos()
         pg.display.update()
+
+    def _update_player_1_pos(self):
+        self.player_1.y = self.player_1.y + self.player_1_speed
+
+        # Do not allow the paddles to go out of the screen
+        if self.player_1.top < 0:
+            self.player_1.top = 0
+        elif self.player_1.bottom > self.screen_rect.bottom:
+            self.player_1.bottom = self.screen_rect.bottom
+
+    def _update_player_2_pos(self):
+        self.player_2.y = self.player_2.y + self.player_2_speed
+
+        if self.player_2.top < 0:
+            self.player_2.top = 0
+        elif self.player_2.bottom > self.screen_rect.bottom:
+            self.player_2.bottom = self.screen_rect.bottom
 
     def _update_ball_position(self):
         """Update the position of the ball based on its current x, y speeds and directions"""
@@ -59,16 +91,31 @@ class PongGame:
         self.ball.y = self.ball.y + (self.ball_speed_y * self.ball_y_direction)
 
         if self.ball.bottom >= self.screen_rect.bottom or self.ball.top <= 0:
+            # Every time the direction of the ball is reverted
             self.ball_y_direction *= -1
-        if self.ball.right >= self.screen_rect.right or self.ball.left <= 0:
+        if self.ball.colliderect(self.player_2) or self.ball.colliderect(self.player_1):
             self.ball_x_direction *= -1
 
 
-    def _check_keydown_events(event):
-        pass
+    def _check_keydown_events(self, event):
+        if event.key == pg.K_UP:
+            self.player_2_speed = -6
+        if event.key == pg.K_DOWN:
+            self.player_2_speed = 6
+        if event.key == pg.K_w:
+            self.player_1_speed = -6
+        if event.key == pg.K_s:
+            self.player_1_speed = 6
 
-    def _check_keyup_events(event):
-        pass
+    def _check_keyup_events(self, event):
+        if event.key == pg.K_UP:
+            self.player_2_speed = 0
+        if event.key == pg.K_DOWN:
+            self.player_2_speed = 0
+        if event.key == pg.K_w:
+            self.player_1_speed = 0
+        if event.key == pg.K_s:
+            self.player_1_speed = 0
 
 my_pong_game = PongGame()
 my_pong_game.run()
