@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+import random
 
 class PongGame:
     def __init__(self):
@@ -31,6 +32,11 @@ class PongGame:
 
         self.player_1_speed = 0
         self.player_2_speed = 0
+
+        # Score
+        self.player_1_score = 0
+        self.player_2_score = 0
+        self.score_font = pg.font.Font(None, 80)
 
     def run(self):
         """Run the game loop"""
@@ -66,6 +72,7 @@ class PongGame:
         self._update_ball_position()
         self._update_player_1_pos()
         self._update_player_2_pos()
+        self.update_score()
         pg.display.update()
 
     def _update_player_1_pos(self):
@@ -95,7 +102,31 @@ class PongGame:
             self.ball_y_direction *= -1
         if self.ball.colliderect(self.player_2) or self.ball.colliderect(self.player_1):
             self.ball_x_direction *= -1
+            self.ball_speed_x += 1
+            self.ball_speed_y += 1
 
+        if self.ball.right >= self.screen_rect.right:
+            self.point_won("player_1")
+        if self.ball.left <= self.screen_rect.left:
+            self.point_won("player_2")
+
+    def point_won(self, winner):
+        """Gives the winner 1 point"""
+        if winner == "player_1":
+            self.player_1_score += 1
+        elif winner == "player_2":
+            self.player_2_score += 1
+
+        self.reset_ball()
+        
+    def reset_ball(self):
+        """Reset the ball's position to the center of the screen"""
+        self.ball.center = self.screen_rect.center
+        self.ball.y = random.randint(10, 100)
+        self.ball_x_direction = random.choice([1, -1])
+        self.ball_y_direction = random.choice([1, -1])
+        self.ball_speed_x = 6
+        self.ball_speed_y = 6
 
     def _check_keydown_events(self, event):
         if event.key == pg.K_UP:
@@ -116,6 +147,13 @@ class PongGame:
             self.player_1_speed = 0
         if event.key == pg.K_s:
             self.player_1_speed = 0
+
+    def update_score(self):
+        """Displayes the right score to the screen"""
+        player_1_score_img = self.score_font.render(str(self.player_1_score),True, 'white', 'black')
+        self.screen.blit(player_1_score_img, (self.screen_rect.width/4, 20))
+        player_2_score_img = self.score_font.render(str(self.player_2_score),True, 'white', 'black')
+        self.screen.blit(player_2_score_img, (self.screen_rect.width * 3/4, 20))
 
 my_pong_game = PongGame()
 my_pong_game.run()
