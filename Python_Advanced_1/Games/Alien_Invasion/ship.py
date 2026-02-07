@@ -9,6 +9,7 @@ class Ship:
 
         # Load the ship image and get its rect
         self.image = pg.image.load("ship.bmp")
+        self.image.set_colorkey((230, 230, 230))
         self.rect = self.image.get_rect()
 
         # Put the ship at the bottom center of the screen
