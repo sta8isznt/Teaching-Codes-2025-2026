@@ -26,6 +26,7 @@ class AlienInvasion:
     def run(self):
         while True:
             self._check_events()
+            self.ship.update_position()
             self._update_screen()
             self.clock.tick(60)
 
@@ -40,15 +41,25 @@ class AlienInvasion:
                 self._check_keyup_events(event)
 
     def _update_screen(self):
+        self.screen.fill('black')
         self.screen.blit(self.bg_image, (0,0))
         self.ship.draw_ship()
         pg.display.update()
 
     def _check_keydown_events(self, event):
-        pass
+        if event.key == pg.K_RIGHT:
+            self.ship.moving_right = True
+        elif event.key == pg.K_LEFT:
+            self.ship.moving_left = True
+        elif event.key == pg.K_ESCAPE:
+            pg.quit()
+            sys.exit()
 
     def _check_keyup_events(self, event):
-        pass
+        if event.key == pg.K_RIGHT:
+            self.ship.moving_right = False
+        elif event.key == pg.K_LEFT:
+            self.ship.moving_left = False
 
 ai  = AlienInvasion()
 ai.run()
