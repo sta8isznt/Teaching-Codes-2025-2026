@@ -11,3 +11,12 @@ class Bullet(Sprite):
         self.screen = game.screen
         self.settings = game.settings
         self.color = self.settings.bullet_color
+        self.bullet_width = self.settings.bullet_width
+        self.bullet_height = self.settings.bullet_height
+
+        self.rect = pg.Rect(0,0, self.bullet_width, self.bullet_height)
+        self.rect.midtop = game.ship.rect.midtop
+
+    def update_position(self):
+        """Move the bullet up the screen"""
+        self.rect.y -= self.settings.bullet_speed
