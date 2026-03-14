@@ -17,6 +17,9 @@ class Bullet(Sprite):
         self.rect = pg.Rect(0,0, self.bullet_width, self.bullet_height)
         self.rect.midtop = game.ship.rect.midtop
 
-    def update_position(self):
+    def update(self):
         """Move the bullet up the screen"""
         self.rect.y -= self.settings.bullet_speed
+
+    def draw_bullet(self):
+        pg.draw.rect(self.screen, self.color, self.rect)
