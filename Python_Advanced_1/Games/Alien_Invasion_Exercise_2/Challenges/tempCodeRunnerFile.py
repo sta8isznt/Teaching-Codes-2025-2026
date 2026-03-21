@@ -1,0 +1,1 @@
+self.popai_image = pg.image.load("Popeye_transparent.png")
