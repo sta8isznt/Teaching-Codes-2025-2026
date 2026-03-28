@@ -3,6 +3,7 @@ import sys
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 class AlienInvasion:
     def __init__(self):
@@ -26,6 +27,10 @@ class AlienInvasion:
 
         # Bullets
         self.bullets = pg.sprite.Group()
+
+        # Aliens
+        self.aliens = pg.sprite.Group()
+        self._create_fleet()
 
     def run(self):
         while True:
@@ -54,6 +59,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.draw_ship()
+        self.aliens.draw(self.screen)
         pg.display.update()
 
     def _check_keydown_events(self, event):
@@ -78,6 +84,25 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+
+    def _create_fleet(self):
+        """Create the fleet of aliens"""
+        # Make an Alien
+        new_alien = Alien(self)
+        alien_width = new_alien.rect.width
+        current_x = alien_width
+
+        while current_x < self.settings.screen_width - 2*alien_width:
+            self._create_alien(current_x)
+            current_x = current_x + 2 * alien_width
+
+    def _create_alien(self, x_position):
+        """Create an alien and place it in the row"""
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        self.aliens.add(new_alien)
+        
 
 ai  = AlienInvasion()
 ai.run()

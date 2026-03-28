@@ -13,3 +13,13 @@ class Alien(Sprite):
         self.image = pg.image.load('alien.bmp')
         self.image.set_colorkey((230, 230, 230))
         self.rect = self.image.get_rect()
+
+        # Start each new alien near the top left of the screen
+        self.rect.x = self.rect.width
+        self.rect.y = self.rect.height
+
+        # Store the alien's exact horizontal position
+        self.x = float(self.rect.x)
+
+    def draw(self):
+        self.screen.blit(self.image, self.rect)
